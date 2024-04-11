@@ -14,13 +14,11 @@ airline <- read.csv("Airlines Reviews and Rating.csv")
 airline
 ```
 
-
-## Including Plots
-
-You can also embed plots, for example:
+This dataset from Kaggle has reviews and ratings about airlines. It's got feedback on things like flights, service, and more. People can use it to see how happy passengers are with different airlines and figure out how to make things better. It's useful for the travel industry and anyone who wants to predict how satisfied customers will be.
 
 ```{r pressure, echo=FALSE}
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+This dataset offers a overall view of air travel experiences by not only detailing the type of aircraft in use but also providing ratings for staff performance and overall flight experience, scored on a scale from 1 to 5. In today's aviation landscape, where concerns like the reliability of Boeing aircraft have come to the forefront due to pre-flight breakdowns, being able to discern the type of plane is concequencial for consumers making travel decisions. Moreover, the dataset sheds light on an important aspect often overlooked: the discrepancy between an airline's overall reputation and the quality of its customer service. By providing such nuanced insights, this dataset encourages consumers to play a more active role in their travel choices, prioritizing safety and comfort over mere convenience or brand reputation. It serves as a tool for informed decision-making, ensuring that passengers have the necessary information to make choices that align with their preferences and priorities.
+
