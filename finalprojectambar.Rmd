@@ -32,9 +32,59 @@ This dataset offers a overall view of air travel experiences by not only detaili
 
 Which airline has the best customer service?
 
+```{r}
+best_customer_service <- airline %>%
+  group_by(Country) %>%
+  summarize(averagecustomerservice = mean(Cabin.Staff.Service, na.rm = TRUE)) %>%
+  arrange(desc(averagecustomerservice))
+
+best_customer_service
+
+```
+
+
 How many Planes are Boeing planes?
 
+```{r}
+boeing_planes <- airline %>%
+  filter(str_detect(Aircraft.Type, "Boeing"))
+
+n_boeing_planes <- nrow(boeing_planes)
+
+n_boeing_planes
+
+```
+
+
 Does business class have better accommodation compare to economy? 
+```{r}
+# Filter data for business class
+business_class <- airline %>%
+  filter(Seat_Types == "Business")
+
+# Filter data for economy class
+economy_class <- airline %>%
+  filter(Seat_Types == "Economy")
+
+# Calculate average ratings for each amenity in business class
+avg_ratings_business <- business_class %>%
+  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
+            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
+            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+
+# Calculate average ratings for each amenity in economy class
+avg_ratings_economy <- economy_class %>%
+  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
+            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
+            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+
+# Print the results
+avg_ratings_business
+avg_ratings_economy
+
+```
 
 What is the difrfrence between Economy and Buiness class ex:food bev, wifi, inflight entertainment ect.
 
