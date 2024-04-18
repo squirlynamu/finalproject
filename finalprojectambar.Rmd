@@ -60,11 +60,11 @@ Does business class have better accommodation compare to economy?
 ```{r}
 # Filter data for business class
 business_class <- airline %>%
-  filter(Seat_Types == "Business")
+  filter(Seat_Types == "Business Class")
 
 # Filter data for economy class
 economy_class <- airline %>%
-  filter(Seat_Types == "Economy")
+  filter(Seat_Types == "Economy Class")
 
 # Calculate average ratings for each amenity in business class
 avg_ratings_business <- business_class %>%
@@ -86,6 +86,58 @@ avg_ratings_economy
 
 ```
 
-What is the difrfrence between Economy and Buiness class ex:food bev, wifi, inflight entertainment ect.
+What is the difference between Economy and Buiness class ex:food bev, wifi, inflight entertainment ect.
+
+```{r}
+
+# amenity in business class
+avg_ratings_business <- business_class %>%
+  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
+            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
+            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+
+#  amenity in economy class
+avg_ratings_economy <- economy_class %>%
+  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
+            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
+            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+
+differences <- avg_ratings_business - avg_ratings_economy
+
+differences
+
+differences_long <- differences %>%
+  pivot_longer(cols = everything(), names_to = "Amenity", values_to = "Difference")
+
+
+differences_plot <- ggplot(differences_long, aes(x = Amenity, y = Difference, fill = Amenity)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Differences Between Economy and Business Class Amenities",
+       x = "Amenity",
+       y = "Rating") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set1")
+
+#plot
+print(differences_plot)
+```
 
 which country has the best flights?
+
+```{r}
+
+average_flight_rating <- airline %>%
+  group_by(Country) %>%
+  summarize(average_flight_rating = mean(, na.rm = TRUE)) %>%
+  arrange(desc(average_flight_rating))
+
+
+best_country_for_flights <- average_flight_rating$Country[1]
+
+best_country_for_flight
+
+```
+

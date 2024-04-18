@@ -439,8 +439,68 @@ align with their preferences and priorities.</p>
 <div id="questions" class="section level2">
 <h2><strong>Questions</strong></h2>
 <p>Which airline has the best customer service?</p>
+<pre class="r"><code>best_customer_service &lt;- airline %&gt;%
+  group_by(Country) %&gt;%
+  summarize(averagecustomerservice = mean(Cabin.Staff.Service, na.rm = TRUE)) %&gt;%
+  arrange(desc(averagecustomerservice))
+
+best_customer_service</code></pre>
+<pre><code>## # A tibble: 69 × 2
+##    Country      averagecustomerservice
+##    &lt;chr&gt;                         &lt;dbl&gt;
+##  1 &quot;&quot;                             5   
+##  2 &quot;Bulgaria&quot;                     5   
+##  3 &quot;Chile&quot;                        5   
+##  4 &quot;Costa Rica&quot;                   5   
+##  5 &quot;Luxembourg&quot;                   5   
+##  6 &quot;Panama&quot;                       5   
+##  7 &quot;Senegal&quot;                      5   
+##  8 &quot;Ukraine&quot;                      5   
+##  9 &quot;Brazil&quot;                       4.75
+## 10 &quot;Finland&quot;                      4.5 
+## # ℹ 59 more rows</code></pre>
 <p>How many Planes are Boeing planes?</p>
+<pre class="r"><code>boeing_planes &lt;- airline %&gt;%
+  filter(str_detect(Aircraft.Type, &quot;Boeing&quot;))
+
+n_boeing_planes &lt;- nrow(boeing_planes)
+
+n_boeing_planes</code></pre>
+<pre><code>## [1] 1030</code></pre>
 <p>Does business class have better accommodation compare to economy?</p>
+<pre class="r"><code># Filter data for business class
+business_class &lt;- airline %&gt;%
+  filter(Seat_Types == &quot;Business Class&quot;)
+
+# Filter data for economy class
+economy_class &lt;- airline %&gt;%
+  filter(Seat_Types == &quot;Economy Class&quot;)
+
+# Calculate average ratings for each amenity in business class
+avg_ratings_business &lt;- business_class %&gt;%
+  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
+            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
+            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+
+# Calculate average ratings for each amenity in economy class
+avg_ratings_economy &lt;- economy_class %&gt;%
+  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
+            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
+            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+
+# Print the results
+avg_ratings_business</code></pre>
+<pre><code>##   avg_seat_comfort avg_cabin_staff_service avg_ground_service
+## 1         2.856722                3.445428           2.941312
+##   avg_food_beverages
+## 1           2.918016</code></pre>
+<pre class="r"><code>avg_ratings_economy</code></pre>
+<pre><code>##   avg_seat_comfort avg_cabin_staff_service avg_ground_service
+## 1         2.695995                3.044539           2.658762
+##   avg_food_beverages
+## 1           2.460084</code></pre>
 <p>What is the difrfrence between Economy and Buiness class ex:food bev,
 wifi, inflight entertainment ect.</p>
 <p>which country has the best flights?</p>
