@@ -125,7 +125,7 @@ differences_plot <- ggplot(differences_long, aes(x = Amenity, y = Difference, fi
 print(differences_plot)
 ```
 
-which country has the best flights?
+which country has the best flights (examaple)?
 
 ```{r}
 
