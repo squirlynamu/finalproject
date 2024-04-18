@@ -2,7 +2,7 @@
 title: "Final Project"
 author: "Ambar Flores, Amna Malik "
 date: "Data 2401"
-output: html_document
+output: slidy_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -38,7 +38,7 @@ best_customer_service <- airline %>%
   summarize(averagecustomerservice = mean(Cabin.Staff.Service, na.rm = TRUE)) %>%
   arrange(desc(averagecustomerservice))
 
-best_customer_service
+best_customer_service %>% knitr::kable()
 
 ```
 
@@ -129,15 +129,6 @@ which country has the best flights?
 
 ```{r}
 
-average_flight_rating <- airline %>%
-  group_by(Country) %>%
-  summarize(average_flight_rating = mean(, na.rm = TRUE)) %>%
-  arrange(desc(average_flight_rating))
-
-
-best_country_for_flights <- average_flight_rating$Country[1]
-
-best_country_for_flight
 
 ```
 
