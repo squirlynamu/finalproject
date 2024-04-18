@@ -5,6 +5,9 @@ date: "Data 2401"
 output: slidy_presentation
 ---
 
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -20,16 +23,34 @@ library(lubridate)
 airline <- read.csv("Airlines Reviews and Rating.csv")
 head(airline)
 ```
-## **summary**
+## **Introduction**
+[Link to Airline Reviews and ratings](https://www.kaggle.com/datasets/anandshaw2001/airlines-reviews-and-rating)
 
-This dataset from Kaggle has reviews and ratings about airlines. It's got feedback on things like flights, service, and more. People can use it to see how happy passengers are with different airlines and figure out how to make things better. It's useful for the travel industry and anyone who wants to predict how satisfied customers will be.
+Hate not having a knowledge how you're flight never has any info to help you make a decision base on you and your budget, wish it was much simpler to decided if you want a late flight vs a morning flight and if it is worth it? In our presentation we are trying to show the difference between business class, economy class, and premium economy class.By the rating, reviews, and also the experience of the flights.The data I have chosen "Airlines Reviews and rating" from Kaggle and the data created by Anandshaw.
 
 
-This dataset offers a overall view of air travel experiences by not only detailing the type of aircraft in use but also providing ratings for staff performance and overall flight experience, scored on a scale from 1 to 5. In today's aviation landscape, where concerns like the reliability of Boeing aircraft have come to the forefront due to pre-flight breakdowns, being able to discern the type of plane is concequencial for consumers making travel decisions. Moreover, the dataset sheds light on an important aspect often overlooked: the discrepancy between an airline's overall reputation and the quality of its customer service. By providing such nuanced insights, this dataset encourages consumers to play a more active role in their travel choices, prioritizing safety and comfort over mere convenience or brand reputation. It serves as a tool for informed decision-making, ensuring that passengers have the necessary information to make choices that align with their preferences and priorities.
+<img src="C:/Users/ambar/OneDrive/Desktop/Data 2401/finalproject/Featured-Image-Airline-Flights.jpg" alt="Planes" style="width: 50%; height: auto;">
 
+----
 
 ## **Questions**
 
+1. Which airline has the best customer service?
+2. How many Planes are Boeing planes? and what percentage are they to the flights?
+3. who has better commendations buiness class, economy, or premium economy? 
+4. What is the difference between Economy, Business class, premium economy  ex:food bev, wifi, inflight entertainment ect.
+5. which country has the best flights (examaple)?
+
+
+
+
+
+
+
+
+
+
+##
 Which airline has the best customer service?
 
 ```{r}
@@ -41,7 +62,7 @@ best_customer_service <- airline %>%
 best_customer_service %>% knitr::kable()
 
 ```
-
+##
 
 How many Planes are Boeing planes?
 
@@ -55,7 +76,7 @@ n_boeing_planes
 
 ```
 
-
+##
 Does business class have better accommodation compare to economy? 
 ```{r}
 # Filter data for business class
@@ -86,6 +107,7 @@ avg_ratings_economy
 
 ```
 
+##
 What is the difference between Economy and Buiness class ex:food bev, wifi, inflight entertainment ect.
 
 ```{r}
@@ -124,7 +146,7 @@ differences_plot <- ggplot(differences_long, aes(x = Amenity, y = Difference, fi
 #plot
 print(differences_plot)
 ```
-
+##
 which country has the best flights (examaple)?
 
 ```{r}
