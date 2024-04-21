@@ -35,13 +35,23 @@ Hate not having a knowledge how you're flight never has any info to help you mak
 
 ## **Questions**
 
+
 1. Which airline has the best customer service?
+
 2. How many Planes are Boeing planes? and what percentage are they to the flights?
-3.Who has better cabin crew, and ground service business class, economy,premium economy, or first class?
-4. What is the difference between Economy, Business class, Premium Economy, and First Class for food & beverage, WiFi, in flight entertainment?
-5. which top 20 flights have the best value for your money?
-6.what percentage of flights are recommended? 
-7.
+
+3. Who has better cabin crew, and ground service business class, economy,premium economy, or first
+   class?
+
+4. What is the difference between Economy, Business class, Premium Economy, and First Class for food &    beverage, WiFi, in flight entertainment?
+
+5. Which top 20 flights have the best value for your money?
+
+6. What percentage of flights are recommended? 
+
+7. Which travelers had the best value for their money? 
+
+8. where did the most of Solo Leisure, Couple Leisure, Business, and family leisure travel?
 
 ---
 
@@ -232,21 +242,19 @@ ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
 
 ---
 
-**5. which top 20 flights have the best value for your money?**
+**5. Which top 20 flights have the best value for your money?**
 
 ```{r, echo=FALSE}
 
 
-# Calculate average value for money for each route
 avg_value_for_money <- airline %>%
   group_by(Route) %>%
   summarize(avg_value = mean(Value.For.Money, na.rm = TRUE)) %>%
   arrange(desc(avg_value))
 
-# Filter the top 10 routes
+
 top_10_routes <- head(avg_value_for_money, 20)
 
-# Plot the results using a bar graph
 ggplot(top_10_routes, aes(x = reorder(Route, avg_value), y = avg_value)) +
   geom_bar(stat = "identity", fill = "darkblue") +
   labs(
@@ -268,19 +276,17 @@ ggplot(top_10_routes, aes(x = reorder(Route, avg_value), y = avg_value)) +
 
 ```{r,echo=FALSE}
 
-# Count the number of flights recommended with "Yes"
+
 recommended_flights <- airline %>%
   filter(Recommended == "yes") 
 
-# Calculate the percentile
+
 total_flights <- nrow(airline)
 percentile <- round((nrow(recommended_flights) / total_flights) * 100, 2)
 
-# Create a data frame
 flight_data <- data.frame(Recommendation = c("Recommended", "Not Recommended"), 
                            Percentage = c(percentile, 100 - percentile))
 
-# Plot the bar graph
 ggplot(flight_data, aes(x = Recommendation, y = Percentage, fill = Recommendation)) +
   geom_bar(stat = "identity") +
   labs(
@@ -293,13 +299,64 @@ ggplot(flight_data, aes(x = Recommendation, y = Percentage, fill = Recommendatio
   theme_minimal()
 
 
+```
+
+---
 
 
+**7. Which travelers had the best value for their money? **
 
+```{r, echo=FALSE}
+
+filtered_data <- airline %>%
+  filter(Type_of_Travellers %in% c("Solo Leisure", "Couple Leisure", "Business", "Family Leisure"))
+
+ggplot(filtered_data, aes(x = Type_of_Travellers, y = Value.For.Money)) +
+  geom_boxplot(fill = "skyblue") +
+  labs(
+    title = "Comparison of Total Value for Money by Type of Travelers",
+    x = "Type of Travelers",
+    y = "Total Value for Money"
+  ) +
+  theme_minimal()
 
 
 ```
 
 ---
+**8. where did the most of Solo Leisure, Couple Leisure, Business, and family leisure travel?**
+
+```{r, echo=FALSE}
+grouped_data <- filtered_data %>%
+  group_by(Type_of_Travellers, Route) %>%
+  summarize(Count = n()) %>%
+  arrange(Type_of_Travellers, desc(Count))
+
+top_destinations <- grouped_data %>%
+  group_by(Type_of_Travellers) %>%
+  top_n(3, Count)
+
+ggplot(top_destinations, aes(x = reorder(Route, -Count), y = Count, fill = Type_of_Travellers)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Top Destinations for Each Type of Traveler",
+    x = "Destination",
+    y = "Number of Flights",
+    fill = "Type of Traveler"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```
+
+
+
+---
+
+
+
+
 
 
