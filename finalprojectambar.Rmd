@@ -12,14 +12,14 @@ output: slidy_presentation
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r,echo=FALSE }
 library(tidyverse) 
 library(ggplot2) 
 library(lubridate)
 ```
 
 
-```{r}
+```{r,echo=FALSE }
 airline <- read.csv("Airlines Reviews and Rating.csv")
 head(airline)
 ```
@@ -37,120 +37,269 @@ Hate not having a knowledge how you're flight never has any info to help you mak
 
 1. Which airline has the best customer service?
 2. How many Planes are Boeing planes? and what percentage are they to the flights?
-3. who has better commendations buiness class, economy, or premium economy? 
-4. What is the difference between Economy, Business class, premium economy  ex:food bev, wifi, inflight entertainment ect.
-5. which country has the best flights (examaple)?
+3.Who has better cabin crew, and ground service business class, economy,premium economy, or first class?
+4. What is the difference between Economy, Business class, Premium Economy, and First Class for food & beverage, WiFi, in flight entertainment?
+5. which top 20 flights have the best value for your money?
+6.what percentage of flights are recommended? 
+7.
 
+---
 
+**1. Which airline has the best customer service?**
 
-
-
-
-
-
-
-
-##
-Which airline has the best customer service?
-
-```{r}
+```{r, echo=FALSE}
 best_customer_service <- airline %>%
   group_by(Country) %>%
   summarize(averagecustomerservice = mean(Cabin.Staff.Service, na.rm = TRUE)) %>%
   arrange(desc(averagecustomerservice))
 
-best_customer_service %>% knitr::kable()
-
+ggplot(best_customer_service, aes(x = reorder(Country, -averagecustomerservice), y = averagecustomerservice)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Average Customer Service Rating by Country",
+       x = "Country",
+       y = "Average Customer Service Rating") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
 ```
-##
 
-How many Planes are Boeing planes?
 
-```{r}
+---
+
+**2. How many Planes are Boeing planes? and what percentage are they to the flights?**
+
+```{r,echo=FALSE }
+
 boeing_planes <- airline %>%
   filter(str_detect(Aircraft.Type, "Boeing"))
 
 n_boeing_planes <- nrow(boeing_planes)
 
-n_boeing_planes
+total_flights <- 3290  
+
+percentage_boeing_planes <- (n_boeing_planes / total_flights) * 100
+
+pie_data <- data.frame(Category = c("Boeing Planes", "Other Planes"),
+                       Percentage = c(percentage_boeing_planes, 100 - percentage_boeing_planes))
+
+pie_chart <- ggplot(pie_data, aes(x = "", y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("Boeing Planes" = "red", "Other Planes" = "blue")) +
+  labs(title = "Percentage of Boeing Planes to Total Flights",
+       fill = "Category",
+       caption = paste0("Boeing Planes: ", round(percentage_boeing_planes, 2), "%",
+                       "\nOther Planes: ", round(100 - percentage_boeing_planes, 2), "%")) +
+  theme_void() +
+  theme(legend.position = "bottom")
+
+#I know you dont like pie chart but i still have it for the laughs
+
+
+bar_chart <- ggplot(pie_data, aes(x = Category, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(round(Percentage, 2), "%")), vjust = -0.5) +
+  scale_fill_manual(values = c("Boeing Planes" = "red", "Other Planes" = "blue")) +
+  labs(title = "Percentage of Boeing Planes to Total Flights",
+       x = NULL,
+       y = "Percentage",
+       fill = "Category",
+       caption = paste0("Boeing Planes: ", round(percentage_boeing_planes, 2), "%",
+                       "\nOther Planes: ", round(100 - percentage_boeing_planes, 2), "%")) +
+  theme_minimal()
+
+print(bar_chart)
 
 ```
 
-##
-Does business class have better accommodation compare to economy? 
-```{r}
-# Filter data for business class
+---
+
+
+**3. Who has better cabin crew, and ground service business class, economy,premium economy, or first class?**
+
+```{r,echo=FALSE }
 business_class <- airline %>%
   filter(Seat_Types == "Business Class")
 
-# Filter data for economy class
+avg_ratings_business <- business_class %>%
+  summarize(
+    cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+    ground_service = mean(Ground.Service, na.rm = TRUE)
+  )
+
 economy_class <- airline %>%
   filter(Seat_Types == "Economy Class")
 
-# Calculate average ratings for each amenity in business class
-avg_ratings_business <- business_class %>%
-  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
-            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
-            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
-            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
-
-# Calculate average ratings for each amenity in economy class
 avg_ratings_economy <- economy_class %>%
-  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
-            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
-            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
-            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+  summarize(
+    cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+    ground_service = mean(Ground.Service, na.rm = TRUE)
+  )
 
-# Print the results
-avg_ratings_business
-avg_ratings_economy
+first_class <- airline %>%
+  filter(Seat_Types == "First Class")
 
-```
+avg_ratings_first <- first_class %>%
+  summarize(
+    cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+    ground_service = mean(Ground.Service, na.rm = TRUE)
+  )
 
-##
-What is the difference between Economy and Buiness class ex:food bev, wifi, inflight entertainment ect.
+premium_economy <- airline %>%
+  filter(Seat_Types == "Premium Economy")
 
-```{r}
+avg_ratings_premium <- premium_economy %>%
+  summarize(
+    cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
+    ground_service = mean(Ground.Service, na.rm = TRUE)
+  )
 
-# amenity in business class
-avg_ratings_business <- business_class %>%
-  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
-            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
-            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
-            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+avg_ratings_all <- rbind(avg_ratings_business, avg_ratings_economy, avg_ratings_first, avg_ratings_premium)
+avg_ratings_all$class <- c("Business Class", "Economy Class", "First Class", "Premium Economy")
 
-#  amenity in economy class
-avg_ratings_economy <- economy_class %>%
-  summarize(avg_seat_comfort = mean(Seat.Comfort, na.rm = TRUE),
-            avg_cabin_staff_service = mean(Cabin.Staff.Service, na.rm = TRUE),
-            avg_ground_service = mean(Ground.Service, na.rm = TRUE),
-            avg_food_beverages = mean(Food...Beverages, na.rm = TRUE))
+avg_ratings_long <- tidyr::gather(avg_ratings_all, key = "amenity", value = "rating", -class)
 
-differences <- avg_ratings_business - avg_ratings_economy
-
-differences
-
-differences_long <- differences %>%
-  pivot_longer(cols = everything(), names_to = "Amenity", values_to = "Difference")
-
-
-differences_plot <- ggplot(differences_long, aes(x = Amenity, y = Difference, fill = Amenity)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Differences Between Economy and Business Class Amenities",
-       x = "Amenity",
-       y = "Rating") +
+ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Average Ratings of Amenities by Class",
+    x = "Amenity",
+    y = "Average Rating",
+    fill = "Class"
+  ) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set1")
-
-#plot
-print(differences_plot)
-```
-##
-which country has the best flights (examaple)?
-
-```{r}
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
+---
+
+
+**4. What is the difference between Economy, Business class, Premium Economy, and First Class for food & beverage, WiFi, in flight entertainment?**
+
+```{r,echo=FALSE }
+
+
+# Calculate average ratings for each amenity
+avg_ratings_economy <- economy_class %>%
+  summarize(
+    Seat.Comfort = mean(Seat.Comfort, na.rm = TRUE),
+    Food...Beverages = mean(Food...Beverages, na.rm = TRUE),
+    Wifi...Connectivity = mean(Wifi...Connectivity, na.rm = TRUE),
+   Inflight.Entertainment = mean(Inflight.Entertainment, na.rm = TRUE)
+  )
+
+avg_ratings_premium_economy <- premium_economy %>%
+  summarize(
+   Seat.Comfort = mean(Seat.Comfort, na.rm = TRUE),
+    Food...Beverages = mean(Food...Beverages, na.rm = TRUE),
+    Wifi...Connectivity = mean(Wifi...Connectivity, na.rm = TRUE),
+   Inflight.Entertainment = mean(Inflight.Entertainment, na.rm = TRUE)
+  )
+
+avg_ratings_business <- business_class %>%
+  summarize(
+   Seat.Comfort = mean(Seat.Comfort, na.rm = TRUE),
+    Food...Beverages = mean(Food...Beverages, na.rm = TRUE),
+    Wifi...Connectivity = mean(Wifi...Connectivity, na.rm = TRUE),
+   Inflight.Entertainment = mean(Inflight.Entertainment, na.rm = TRUE)
+  )
+
+avg_ratings_first <- first_class %>%
+  summarize(
+    Seat.Comfort = mean(Seat.Comfort, na.rm = TRUE),
+    Food...Beverages = mean(Food...Beverages, na.rm = TRUE),
+    Wifi...Connectivity = mean(Wifi...Connectivity, na.rm = TRUE),
+   Inflight.Entertainment = mean(Inflight.Entertainment, na.rm = TRUE)
+  )
+
+avg_ratings_all <- rbind(avg_ratings_economy, avg_ratings_premium_economy, avg_ratings_business, avg_ratings_first)
+avg_ratings_all$class <- c("Economy Class", "Premium Economy", "Business Class", "First Class")
+
+avg_ratings_long <- tidyr::gather(avg_ratings_all, key = "amenity", value = "rating", -class)
+
+
+ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Comparison of Amenities by Class",
+    x = "Amenity",
+    y = "Average Rating",
+    fill = "Class"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+---
+
+**5. which top 20 flights have the best value for your money?**
+
+```{r, echo=FALSE}
+
+
+# Calculate average value for money for each route
+avg_value_for_money <- airline %>%
+  group_by(Route) %>%
+  summarize(avg_value = mean(Value.For.Money, na.rm = TRUE)) %>%
+  arrange(desc(avg_value))
+
+# Filter the top 10 routes
+top_10_routes <- head(avg_value_for_money, 20)
+
+# Plot the results using a bar graph
+ggplot(top_10_routes, aes(x = reorder(Route, avg_value), y = avg_value)) +
+  geom_bar(stat = "identity", fill = "darkblue") +
+  labs(
+    title = "Top 20 Routes with the Best Value for Money",
+    x = "Route",
+    y = "Average Value for Money"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+```
+
+
+---
+
+**6.what percentage of flights are recommended? **
+
+
+```{r,echo=FALSE}
+
+# Count the number of flights recommended with "Yes"
+recommended_flights <- airline %>%
+  filter(Recommended == "yes") 
+
+# Calculate the percentile
+total_flights <- nrow(airline)
+percentile <- round((nrow(recommended_flights) / total_flights) * 100, 2)
+
+# Create a data frame
+flight_data <- data.frame(Recommendation = c("Recommended", "Not Recommended"), 
+                           Percentage = c(percentile, 100 - percentile))
+
+# Plot the bar graph
+ggplot(flight_data, aes(x = Recommendation, y = Percentage, fill = Recommendation)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Percentage of Recommended Flights vs. Others",
+    x = "Recommendation",
+    y = "Percentage of Flights",
+    fill = "Recommendation"
+  ) +
+  geom_text(aes(label = paste0(Percentage, "%")), vjust = -0.5) +
+  theme_minimal()
+
+
+
+
+
+
+
+```
+
+---
+
 
