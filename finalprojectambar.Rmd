@@ -39,6 +39,38 @@ Hate not having a knowledge how you're flight never has any info to help you mak
 
 ----
 
+**Key Terms**
+
+Aircraft.Type = Type of plane used,
+
+User_Reviews = Review in which the use posted.
+
+Country = Country of departure for flight.
+
+Type_Of_Traveler = The type of traveler such as solo traveler, businesses traveler, family, or couples.
+
+Route = the route which the plane is taking
+
+Seat_Types = what each person paid to seat in.
+
+Seat.Comfort = on a scale from 1 to 5 how good are the seats.
+
+Cabin.Staff.Service = on a scale from 1 to 5 how good is the cabin crew.
+
+Ground.Service = on a scale from 1 to 5 how good is the ground service.
+
+Food...Beverages = on a scale from 1 to 5 how good is the food.
+
+Wifi...Connectivity = on a scale from 1 to 5 how good is the wifi.
+
+Inflight.Entertainment = on a scale from 1 to 5 how good is the entertainment.
+
+Value.For.Money = on a scale from 1 to 5 is this a good value.
+
+Recommended = yes or no would you recommend.
+
+----
+
 ## **Questions**
 
 
@@ -77,6 +109,12 @@ ggplot(best_customer_service, aes(x = reorder(Country, -averagecustomerservice),
        y = "Average Customer Service Rating") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  
   
+top_10_plot <- ggplot(head(best_customer_service, 10), aes(x = reorder(Country, -averagecustomerservice), y = averagecustomerservice)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Top 10 Countries with the Highest Average Customer Service Rating",
+       x = "Country",
+       y = "Average Customer Service Rating") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
@@ -196,7 +234,7 @@ ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
 ```{r,echo=FALSE }
 
 
-# Calculate average ratings for each amenity
+
 avg_ratings_economy <- economy_class %>%
   summarize(
     Seat.Comfort = mean(Seat.Comfort, na.rm = TRUE),
@@ -365,7 +403,7 @@ ggplot(top_destinations, aes(x = reorder(Route, -Count), y = Count, fill = Type_
 
 **Summary**
 
-Bulgaria, Chile, Costa Rica, Luxembourg, Panama, Senegal, Ukraine, and  Brazil  have the customer service and chances are you arent in a Boeing plane, the first class is better, but the upgrade from Premium Economy is worth it for better service, unfortunately i the best value for you money isn't in the best place to have great customer service and is probably not recommended that you fly. But if you have a family you probably travel just as much as couples. ans most people tend to go to Cape town  for a couples gateway.
+Bulgaria, Chile, Costa Rica, Luxembourg, Panama, Senegal, Ukraine, and Brazil have good customer service, and chances are you aren't flying on a Boeing plane. First class is better, but upgrading from Premium Economy is worth it for better service. Unfortunately, the best value for your money isn't always in the place with great customer service, so it may not be recommended that you fly there. However, if you have a family, you probably travel just as much as couples, and most people tend to go to Cape Town for a couples' getaway.
 
 
 ---
