@@ -2,7 +2,7 @@
 title: "Planes"
 author: "Ambar Flores, Amna Malik "
 date: "Data 2401"
-output: html_document
+output: slidy_presentation
 ---
 
 
