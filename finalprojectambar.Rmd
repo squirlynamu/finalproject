@@ -95,6 +95,8 @@ Recommended = yes or no would you recommend.
 
 **1. Which airline has the best customer service?**
 
+We've accumulated our raw data to present a comprehensive comparison of top airline services worldwide. Our approach involves organizing the data by countries and plotting the average customer service ratings accordingly. This bar graph effectively illustrates the average customer service rating per country, with taller bars indicating superior service. Notably, Bulgaria, Chile, and Costa Rica emerge as the front runners with the highest average customer service ratings among the represented nations.
+
 ```{r, echo=FALSE}
 best_customer_service <- airline %>%
   filter(!is.na(Cabin.Staff.Service)) %>%
@@ -121,6 +123,8 @@ top_10_plot <- ggplot(head(best_customer_service, 10), aes(x = reorder(Country, 
 ---
 
 **2. How many Planes are Boeing planes? and what percentage are they to the flights?**
+
+This bar chart visually represents the distribution of Boeing planes compared to other types of aircraft. The striking red segment denotes Boeing planes, comprising 31.31% of the total, while the expansive blue section signifies the remaining 68.69% representing other aircraft types. This presentation underscores the dominance of non-Boeing aircraft in the dataset, highlighting the diversity within the aviation industry.
 
 ```{r,echo=FALSE }
 
@@ -170,6 +174,9 @@ print(bar_chart)
 
 
 **3. Who has better cabin crew, and ground service business class, economy,premium economy, or first class?**
+
+This bar chart provides a clear overview of the average ratings for cabin crew and ground service across different classes. Each bar represents the average rating for either cabin crew or ground service within a specific class, facilitating direct comparison between the two amenities.
+By examining the dataset's ratings, this visualization effectively reveals which class boasts superior ratings for cabin crew service and ground service, helping viewers discern the preferred class for each aspect of service quality.
 
 ```{r,echo=FALSE }
 business_class <- airline %>%
@@ -231,6 +238,10 @@ ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
 
 **4. What is the difference between Economy, Business class, Premium Economy, and First Class for food & beverage, WiFi, in flight entertainment?**
 
+This bar chart illustrates the average ratings for amenities across different travel classes. Each bar represents the average rating for a specific amenity within a particular class, facilitating a comprehensive comparison of amenities across classes.
+
+By highlighting the discrepancies in amenities provided by airlines across various travel classes, this report empowers passengers to make informed decisions based on their preferences and priorities during air travel. It offers valuable insights into the quality of amenities offered in each class, aiding travelers in selecting the most suitable option for their needs and preferences.
+
 ```{r,echo=FALSE }
 
 
@@ -290,6 +301,8 @@ ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
 
 **5. Which top 20 flights have the best value for your money?**
 
+To generate this data, we first calculated the average value for money for each route using the airline dataset. Then, we identified the top 60 routes based on this metric and selected the top 20 routes for visualization. Here's how we obtained the data. These top 20 routes provide valuable insights into the most favorable options in terms of value for money, guiding tourists and travelers in making informed decisions for their trips.
+
 ```{r, echo=FALSE}
 
 
@@ -310,6 +323,7 @@ top_20_routes
 
 **6.what percentage of flights are recommended? **
 
+The bar chart, labeled "Percentage of Recommended Flights vs. Others," visually represents the proportions of recommended and non-recommended flights within the dataset. This presentation aids in grasping the distribution of flights that meet the specified recommendation criteria. Such analysis serves to gauge the overall satisfaction or endorsement level of flights included in the dataset, providing valuable insights into customer preferences and perceptions.
 
 ```{r,echo=FALSE}
 
@@ -343,6 +357,10 @@ ggplot(flight_data, aes(x = Recommendation, y = Percentage, fill = Recommendatio
 
 **7. Which travelers had the best value for their money? **
 
+The box plot serves as a powerful tool for comparing the distribution and central tendency of overall value for money across different categories of travelers. Through this visual representation, one can discern whether certain passenger categories perceive better value for money compared to others.
+
+By examining key metrics such as the median value, range of values, and identification of outliers within each box plot, valuable insights into the variability and overall satisfaction with value for money among various traveler categories are gained. This analysis plays a pivotal role in identifying which types of travelers hold a more favorable perception of value for money, thereby enabling airlines and travel companies to tailor their services and offerings to cater to the diverse needs and preferences of different consumer segments.
+
 ```{r, echo=FALSE}
 
 filtered_data <- airline %>%
@@ -364,19 +382,21 @@ ggplot(filtered_data, aes(x = Type_of_Travellers, y = Value.For.Money)) +
 
 **8. where did the most of Solo Leisure, Couple Leisure, Business, and family leisure travel?**
 
+This code snippet groups the data by the type of traveler and route, then counts the number of flights for each combination. Afterward, it identifies the top 5 destinations for each type of traveler. Finally, it creates a stacked bar plot visualizing the distribution of flights across these destinations for each traveler type. This plot effectively illustrates the top 5 destinations preferred by different types of travelers, providing valuable insights into their travel preferences and behaviors.
+
+
 ```{r, echo=FALSE}
-# Group data by type of traveler and route, then count the number of flights
+
 grouped_data <- filtered_data %>%
   group_by(Type_of_Travellers, Route) %>%
   summarize(Count = n(), .groups = "drop") %>%
   arrange(Type_of_Travellers, desc(Count))
 
-# Get the top 5 destinations for each type of traveler
 top_destinations <- grouped_data %>%
   group_by(Type_of_Travellers) %>%
   top_n(5, Count)
 
-# Plot with stacked bars
+
 ggplot(top_destinations, aes(x = reorder(Route, Count), y = Count, fill = Type_of_Travellers)) +
   geom_bar(stat = "identity", position = "stack") +
   labs(
