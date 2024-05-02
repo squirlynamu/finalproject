@@ -41,33 +41,21 @@ Hate not having a knowledge how you're flight never has any info to help you mak
 
 **Key Terms**
 
-Aircraft.Type = Type of plane used,
+**Aircraft Type:** Type of plane used for the flight.
 
-User_Reviews = Review in which the use posted.
+**User Reviews:** Reviews provided by passengers.
 
-Country = Country of departure for flight.
+**Country:** Country of departure for the flight.
 
-Type_Of_Traveler = The type of traveler such as solo traveler, businesses traveler, family, or couples.
+**Type of Traveler:** Categories include solo traveler, business traveler, family, or couples.
 
-Route = the route which the plane is taking
+**Route:** The flight route.
 
-Seat_Types = what each person paid to seat in.
+**Seat Types:** Categories of seating arrangements.
 
-Seat.Comfort = on a scale from 1 to 5 how good are the seats.
+**Rating Criteria:** Ratings for seat comfort, cabin staff service, ground service, food & beverages, WiFi, in-flight entertainment, and overall value for money.
 
-Cabin.Staff.Service = on a scale from 1 to 5 how good is the cabin crew.
-
-Ground.Service = on a scale from 1 to 5 how good is the ground service.
-
-Food...Beverages = on a scale from 1 to 5 how good is the food.
-
-Wifi...Connectivity = on a scale from 1 to 5 how good is the wifi.
-
-Inflight.Entertainment = on a scale from 1 to 5 how good is the entertainment.
-
-Value.For.Money = on a scale from 1 to 5 is this a good value.
-
-Recommended = yes or no would you recommend.
+**Recommendation:** Whether passengers would recommend the flight.
 
 ----
 
@@ -95,7 +83,7 @@ Recommended = yes or no would you recommend.
 
 **1. Which airline has the best customer service?**
 
-We've accumulated our raw data to present a comprehensive comparison of top airline services worldwide. Our approach involves organizing the data by countries and plotting the average customer service ratings accordingly. This bar graph effectively illustrates the average customer service rating per country, with taller bars indicating superior service. Notably, Bulgaria, Chile, and Costa Rica emerge as the front runners with the highest average customer service ratings among the represented nations.
+We've accumulated our raw data to present a comprehensive comparison of top airline services worldwide. Our approach involves organizing the data by countries and plotting the average customer service ratings accordingly. This bar graph effectively illustrates the average customer service rating per country, with taller bars indicating superior service. Our analysis reveals that Bulgaria, Chile, Costa Rica, Luxembourg, Panama, Senegal, Ukraine, and Brazil consistently offer excellent customer service, as evidenced by high average ratings from passengers.
 
 ```{r, echo=FALSE}
 best_customer_service <- airline %>%
@@ -118,6 +106,7 @@ top_10_plot <- ggplot(head(best_customer_service, 10), aes(x = reorder(Country, 
        y = "Average Customer Service Rating") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
 
 
 ---
@@ -233,6 +222,8 @@ ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
 
 ```
 
+We can tell that first class had overall the best service which is extremly encoraching for people whore are sometimes on the fence about balling out. Buiness class coming in second plave with service which again is expected for the types of travelors who use these services. 
+
 ---
 
 
@@ -297,6 +288,8 @@ ggplot(avg_ratings_long, aes(x = amenity, y = rating, fill = class)) +
 
 ```
 
+Again we see the trend of first class doing better ina lot of ameneties during flights, with premium economy and buiness coming in second place which doee snot suprice us, 
+
 ---
 
 **5. Which top 20 flights have the best value for your money?**
@@ -317,7 +310,7 @@ top_20_routes
 
 
 ```
-
+Altough you cannot see it these are the top 20 out of 60 whcih was a great point brought on to us by our professor during the reviewing component. 
 
 ---
 
@@ -410,6 +403,7 @@ ggplot(top_destinations, aes(x = reorder(Route, Count), y = Count, fill = Type_o
 
 
 ```
+With the changes we implimented we made sure to have all the types of travelers and their top 10 flights, thus way it is easier to fully see which way travelors go. 
 
 ---
 
